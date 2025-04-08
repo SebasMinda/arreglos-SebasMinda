@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <string.h>
 int main()
 {
     int len;
@@ -11,7 +11,7 @@ int main()
     int aprobados[3] = {0};
     int reprobados[3] = {0};
     char nombreEstudiantes[5][20];
-    int cont1=0,cont2=0;
+    int cont=0,cont2=0;
     do
     {
         do
@@ -41,35 +41,35 @@ int main()
         switch (opc)
         {
         case 1:
+            if (cont==estudiantes)
+            {
+                printf("Ya se han ingresado las notas de todos los estudiantes.\n");
+                break;
+            }
             printf("=== INGRESO DE CALIFICACIONES ===\n");
-            for (int i = 0; i < estudiantes; i++)
+            for (int i = 0; i < cont+1; i++)
             {
                 for (int j = 0; j < asignaturas; j++)
                 {
                     do
                     {
-                        printf("Ingrese el nombre del estudiante %d: ", i + 1);
-                        while (getchar() != '\n')
-                            ;
-                        fgets(nombreEstudiantes[i],20, stdin);
-                        len = strlen(nombreEstudiantes[i]-1);
-                        nombreEstudiantes[i][len] = '\0';
-                        printf("Ingrese la nota del estudiante %d en la asignatura %d (0 a 10): ", i + 1, j + 1);
-                        status = scanf("%f", &notas[i][j]);
+                        printf("Ingrese la nota del estudiante %d en la asignatura %d (0 a 10): ", cont+1, j + 1);
+                        status = scanf("%f", &notas[cont][j]);
                         if (status == 0)
                         {
                             printf("Entrada inválida. Por favor, ingrese un número.\n");
                             while (getchar() != '\n')
                                 ; 
                         }
-                        if (notas[i][j] < 0 || notas[i][j] > 10)
+                        if (notas[cont][j] < 0 || notas[cont][j] > 10)
                         {
                             printf("Nota inválida. Debe estar entre 0 y 10.\n");
                         }
-                    } while (notas[i][j] < 0 || notas[i][j] > 10 || status == 0);
+                    } while (notas[cont][j] < 0 || notas[cont][j] > 10 || status == 0);
                 }
                 break;
             }
+            cont++;
             break;
 
         case 2:
@@ -91,7 +91,16 @@ int main()
             }
             break;
         case 4:
-            // Promedios, máximos y mínimos por estudiante
+            printf("\n=== LISTADO DE ESTUDIANTES ===\n");
+            for (int i = 0; i < cont; i++)
+            {
+                printf("Estudiante %d: ", i + 1);
+                for (int j = 0; j < asignaturas; j++)
+                {
+                    printf("Asignatura %d: %.2f ", j + 1, notas[i][j]);
+                }
+            }
+            
             printf("\n=== PROMEDIOS POR ESTUDIANTE ===\n");
             for (int i = 0; i < estudiantes; i++)
             {
