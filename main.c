@@ -2,6 +2,7 @@
 
 int main()
 {
+    int len;
     int estudiantes = 5, status;
     int asignaturas = 3, opc;
     int notaAprobatoria = 6;
@@ -10,35 +11,36 @@ int main()
     int aprobados[3] = {0};
     int reprobados[3] = {0};
     char nombreEstudiantes[5][20];
-    do {
-    printf("\n=== BIENVENIDO AL PROGRAMA DE CALIFICACIONES ===\n");
-    printf("Seleccione una de las opciones\n");
-    printf("1. Ingreso de calificaciones\n");
-    printf("2. Ingreso de asignaturas\n");
-    printf("3. Aprobados y reprobados por asignatura\n");
-    printf("4. Promedios, maximos y minimos por estudiante\n");
-    printf("5. Promedios, maximos, minimos y aprobaciones por asignatura\n");
-    printf("6. Salir\n");
-    printf("Ingrese su opcion: ");
-    status=scanf("%d", &opc);
-    if (status == 0)
-    {
-        printf("Entrada invalida. Por favor, ingrese un numero.\n");
-        while (getchar() != '\n')
-            ; // Limpiar el buffer de entrada
-    }
-    if (opc < 1 || opc > 6)
-    {
-        printf("Opcion invalida. Debe estar entre 1 y 6.\n");
-    }
-    } while (opc < 1 || opc > 6 || status == 0);    
-    
+    int cont1=0,cont2=0;
     do
     {
+        do
+        {
+            printf("\n=== BIENVENIDO AL PROGRAMA DE CALIFICACIONES ===\n");
+            printf("Seleccione una de las opciones\n");
+            printf("1. Ingreso de calificaciones\n");
+            printf("2. Ingreso de asignaturas\n");
+            printf("3. Aprobados y reprobados por asignatura\n");
+            printf("4. Promedios, maximos y minimos por estudiante\n");
+            printf("5. Promedios, maximos, minimos y aprobaciones por asignatura\n");
+            printf("6. Salir\n");
+            printf("Ingrese su opcion: ");
+            status = scanf("%d", &opc);
+            if (status == 0)
+            {
+                printf("Entrada invalida. Por favor, ingrese un numero.\n");
+                while (getchar() != '\n')
+                    ; // Limpiar el buffer de entrada
+            }
+            if (opc < 1 || opc > 6)
+            {
+                printf("Opcion invalida. Debe estar entre 1 y 6.\n");
+            }
+        } while (opc < 1 || opc > 6 || status == 0);
+
         switch (opc)
         {
         case 1:
-            // Ingreso de calificaciones
             printf("=== INGRESO DE CALIFICACIONES ===\n");
             for (int i = 0; i < estudiantes; i++)
             {
@@ -47,14 +49,18 @@ int main()
                     do
                     {
                         printf("Ingrese el nombre del estudiante %d: ", i + 1);
-                        status = scanf("%s", nombreEstudiantes[i]);
+                        while (getchar() != '\n')
+                            ;
+                        fgets(nombreEstudiantes[i],20, stdin);
+                        len = strlen(nombreEstudiantes[i]-1);
+                        nombreEstudiantes[i][len] = '\0';
                         printf("Ingrese la nota del estudiante %d en la asignatura %d (0 a 10): ", i + 1, j + 1);
                         status = scanf("%f", &notas[i][j]);
                         if (status == 0)
                         {
                             printf("Entrada inválida. Por favor, ingrese un número.\n");
                             while (getchar() != '\n')
-                                ; // Limpiar el buffer de entrada
+                                ; 
                         }
                         if (notas[i][j] < 0 || notas[i][j] > 10)
                         {
@@ -62,6 +68,7 @@ int main()
                         }
                     } while (notas[i][j] < 0 || notas[i][j] > 10 || status == 0);
                 }
+                break;
             }
             break;
 
