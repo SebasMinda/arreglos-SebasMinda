@@ -2,167 +2,173 @@
 #include <string.h>
 int main()
 {
-    int len;
-    int estudiantes = 5, status;
-    int asignaturas = 3, opc;
-    int notaAprobatoria = 6;
+    int len, EstudiantesIngresados=0, EstudiantesIngresados2=0, EstudiantesIngresados3, estudiantes = 5, status, asignaturas = 3, opc, notaAprobatoria = 6;
     float notas[5][3];
     float sumaEstudiante, sumaAsignatura;
     int aprobados[3] = {0};
     int reprobados[3] = {0};
     char nombreEstudiantes[5][20];
-    int cont=0,cont2=0;
+
+
+    #define Rojo "\x1B[31m"
+    #define Verde "\x1B[32m"
+    #define Celeste "\x1B[36m"
+    #define Reset "\x1B[0m"
+    printf(Celeste"\n=== BIENVENIDO AL PROGRAMA DE CALIFICACIONES ===\n"Reset);
     do
     {
         do
         {
-            printf("\n=== BIENVENIDO AL PROGRAMA DE CALIFICACIONES ===\n");
-            printf("Seleccione una de las opciones\n");
-            printf("1. Ingreso de calificaciones\n");
-            printf("2. Ingreso de asignaturas\n");
-            printf("3. Aprobados y reprobados por asignatura\n");
-            printf("4. Listado de estudiantes\n");
-            printf("5. Promedios, maximos, minimos y aprobaciones por asignatura\n");
-            printf("6. Salir\n");
+            printf("\nSeleccione una de las opciones\n");
+            printf(Celeste"1."Reset" Ingreso de calificaciones\n");
+            printf(Celeste"2."Reset" Aprobados y Reprobados por Asignatura\n");
+            printf(Celeste"3."Reset" Promedios de Estudiantes y Asignaturas\n");
+            printf(Celeste"4."Reset" Maximos y Minimos de Estudiantes y Asignaturas\n");
+            printf(Celeste"5."Reset" Salir\n");
             printf("Ingrese su opcion: ");
             status = scanf("%d", &opc);
-            if (status == 0)
+            if (status == 0||opc < 1 || opc > 5)
             {
-                printf("Entrada invalida. Por favor, ingrese un numero.\n");
+                printf(Rojo"\nEntrada invalida.\n"Reset);
                 while (getchar() != '\n')
                     ; // Limpiar el buffer de entrada
-            }
-            if (opc < 1 || opc > 6)
-            {
-                printf("Opcion invalida. Debe estar entre 1 y 6.\n");
             }
         } while (opc < 1 || opc > 6 || status == 0);
 
         switch (opc)
         {
         case 1:
-            if (cont==estudiantes)
+            if (EstudiantesIngresados==estudiantes)
             {
-                printf("Ya se han ingresado las notas de todos los estudiantes.\n");
+                printf("\nYa se han ingresado las notas de todos los estudiantes.\n");
                 break;
             }
-            printf("=== INGRESO DE CALIFICACIONES ===\n");
-            for (int i = 0; i < cont+1; i++)
-            {
-                for (int j = 0; j < asignaturas; j++)
+            printf(Celeste"\n=== INGRESO DE CALIFICACIONES ===\n"Reset);
+            while (EstudiantesIngresados<estudiantes){
+                for (int i = 0; i < EstudiantesIngresados+1; i++)
                 {
-                    do
+                    printf(Verde"\nEstudiante %d:\n\n", EstudiantesIngresados+1);
+                    for (int j = 0; j < asignaturas; j++)
                     {
-                        printf("Ingrese la nota del estudiante %d en la asignatura %d (0 a 10): ", cont+1, j + 1);
-                        status = scanf("%f", &notas[cont][j]);
-                        if (status == 0)
+                        do
                         {
-                            printf("Entrada inválida. Por favor, ingrese un número.\n");
-                            while (getchar() != '\n')
-                                ; 
-                        }
-                        if (notas[cont][j] < 0 || notas[cont][j] > 10)
-                        {
-                            printf("Nota inválida. Debe estar entre 0 y 10.\n");
-                        }
-                        if (notas[cont][j]>=6)
-                        {
+                            printf(Reset"Ingrese la nota del estudiante %d en la asignatura %d (0 a 10): ", EstudiantesIngresados+1, j + 1);
+                            status = scanf("%f", &notas[EstudiantesIngresados][j]);
+                            if (status == 0||notas[EstudiantesIngresados][j] < 0 || notas[EstudiantesIngresados][j] > 10)
+                            {
+                                printf(Rojo"\nEntrada invalida.\n\n"Reset);
+                                while (getchar() != '\n')
+                                    ; 
+                            }
+                        } while (notas[EstudiantesIngresados][j] < 0 || notas[EstudiantesIngresados][j] > 10 || status == 0);
+                        if (notas[EstudiantesIngresados][j] >= notaAprobatoria) {
                             aprobados[j]++;
-                        }
-                        else
-                        {
+                        } else {
                             reprobados[j]++;
                         }
-                        
-                    } while (notas[cont][j] < 0 || notas[cont][j] > 10 || status == 0);
+                    }
+                    break;
                 }
-                break;
+                EstudiantesIngresados++;
             }
-            cont++;
             break;
 
         case 2:
-            printf("=== INGRESO DE ASIGNATURAS ===\n");
-            printf("Ingrese el número de asignaturas (1-10): ");
-            scanf("%d", &asignaturas);
-            if (asignaturas < 1 || asignaturas > 10)
+            if (EstudiantesIngresados<estudiantes)
             {
-                printf("Numero de asignaturas invalido. Debe estar entre 1 y 10.\n");
+                printf(Rojo"\nNo se han registrado los estudiantes todavia.\n"Reset);
+                break;
             }
-            break;
-        case 3:
-            printf("\n=== APROBADOS Y REPROBADOS POR ASIGNATURA ===\n");
+            // Aprobados y reprobados por asignatura
+            printf(Celeste"\n=== APROBADOS Y REPROBADOS POR ASIGNATURA ===\n"Reset);
             for (int j = 0; j < asignaturas; j++)
             {
                 printf("Asignatura %d -> Aprobados: %d | Reprobados: %d\n",
                        j + 1, aprobados[j], reprobados[j]);
             }
             break;
-        case 4:
-            printf("\n=== LISTADO DE ESTUDIANTES ===\n");
-            for (int i = 0; i < cont; i++)
-            {
-                printf("Estudiante %d: ", i + 1);
-                for (int j = 0; j < asignaturas; j++)
-                {
-                    printf("Asignatura %d: %.2f ", j + 1, notas[i][j]);
-                }
+        case 3:
+            if (EstudiantesIngresados < estudiantes) {
+                printf(Rojo"\nNo se han registrado los estudiantes todavia.\n"Reset);
+                break;
             }
-        break;
-        case 5:
-            printf("\n=== PROMEDIOS POR ESTUDIANTE ===\n");
-            for (int i = 0; i < estudiantes; i++)
-            {
+        
+            printf(Celeste"\n=== PROMEDIO DE CALIFICACIONES ===\n"Reset);
+        
+            // Promedio por estudiante
+            printf(Verde"\n=== PROMEDIO POR ESTUDIANTE ===\n"Reset);
+            for (int i = 0; i < estudiantes; i++) {
                 sumaEstudiante = 0;
-                float max = notas[i][0], min = notas[i][0];
-                for (int j = 0; j < asignaturas; j++)
-                {
-                    float nota = notas[i][j];
-                    sumaEstudiante += nota;
-                    if (nota > max)
-                        max = nota;
-                    if (nota < min)
-                        min = nota;
+                for (int j = 0; j < asignaturas; j++) {
+                    sumaEstudiante += notas[i][j];
                 }
-                printf("Estudiante %d -> Promedio: %.2f | Máx: %.2f | Mín: %.2f\n",
-                       i + 1, sumaEstudiante / asignaturas, max, min);
+                printf("Estudiante %d -> Promedio: %.2f\n", i + 1, sumaEstudiante / asignaturas);
             }
-            break;
-        case 6:
-            // Promedios, máximos, mínimos y aprobaciones por asignatura
-            printf("\n=== PROMEDIOS POR ASIGNATURA ===\n");
-            for (int j = 0; j < asignaturas; j++)
-            {
+        
+            // Promedio por asignatura
+            printf(Verde"\n=== PROMEDIO POR ASIGNATURA ===\n"Reset);
+            for (int j = 0; j < asignaturas; j++) {
                 sumaAsignatura = 0;
-                float max = notas[0][j], min = notas[0][j];
-                for (int i = 0; i < estudiantes; i++)
-                {
-                    float nota = notas[i][j];
-                    sumaAsignatura += nota;
-                    if (nota > max)
-                        max = nota;
-                    if (nota < min)
-                        min = nota;
-                    if (nota >= notaAprobatoria)
-                    {
-                        aprobados[j]++;
+                for (int i = 0; i < estudiantes; i++) {
+                    sumaAsignatura += notas[i][j];
+                }
+                printf("Asignatura %d -> Promedio: %.2f\n", j + 1, sumaAsignatura / estudiantes);
+            }
+            break;
+        case 4:
+        
+            if (EstudiantesIngresados < estudiantes) {
+                printf(Rojo"\nNo se han registrado los estudiantes todavia.\n"Reset);
+                break;
+            }
+        
+            printf(Celeste"\n=== CALIFICACION MAS ALTA Y MAS BAJA ===\n"Reset);
+        
+            // EnEstudiantesIngresadosrar calificación más alta y más baja por estudiante
+            printf(Verde"\n=== CALIFICACION MAS ALTA Y MAS BAJA POR ESTUDIANTE ===\n"Reset);
+            for (int i = 0; i < estudiantes; i++) {
+                float maxEstudiante = notas[i][0];
+                float minEstudiante = notas[i][0];
+        
+                for (int j = 1; j < asignaturas; j++) {
+                    if (notas[i][j] > maxEstudiante) {
+                        maxEstudiante = notas[i][j];
                     }
-                    else
-                    {
-                        reprobados[j]++;
+                    if (notas[i][j] < minEstudiante) {
+                        minEstudiante = notas[i][j];
                     }
                 }
-                printf("Asignatura %d -> Promedio: %.2f | Máx: %.2f | Mín: %.2f\n",
-                       j + 1, sumaAsignatura / estudiantes, max, min);
+        
+                printf("Estudiante %d -> Maxima: %.2f | Minima: %.2f\n", i + 1, maxEstudiante, minEstudiante);
             }
-        case 7:
-            printf("=== SALIR ===\n");
-            printf("Saliendo del programa...\n");
+        
+            // EnEstudiantesIngresadosrar calificación más alta y más baja por asignatura
+            printf(Verde"\n=== CALIFICACION MAS ALTA Y MAS BAJA POR ASIGNATURA ===\n"Reset);
+            for (int j = 0; j < asignaturas; j++) {
+                float maxAsignatura = notas[0][j];
+                float minAsignatura = notas[0][j];
+        
+                for (int i = 1; i < estudiantes; i++) {
+                    if (notas[i][j] > maxAsignatura) {
+                        maxAsignatura = notas[i][j];
+                    }
+                    if (notas[i][j] < minAsignatura) {
+                        minAsignatura = notas[i][j];
+                    }
+                }
+        
+                printf("Asignatura %d -> Maxima: %.2f | Minima: %.2f\n", j + 1, maxAsignatura, minAsignatura);
+            }
             break;
+    
+        case 5:
+            printf(Rojo"\n=== SALIR ===\n");
+            printf("Saliendo del programa...\n\n"Reset);
+            return 0;
         default:
-            printf("Opción inválida. Por favor, elija una opción válida.\n");
+            printf(Rojo"Opción invalida.\n"Reset);
             break;
         }
-    } while (opc != 7);
+    } while (opc != 6);
     return 0;
 }
